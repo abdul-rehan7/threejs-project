@@ -29,7 +29,7 @@ const Waves = () => {
     const waveSpeed = 0.1;
     const waveHeight = 12;
     const FPS = 45;
-    let startTime = new Date().getTime();
+    const startTime = new Date().getTime();
 
     // Seed the noise
     Noise.seed(Math.random());
