@@ -1,6 +1,5 @@
-// lib/noise.js
 const Noise = (function () {
-    const module = {};
+    const noiseModule = {};  // renamed 'module' to 'noiseModule'
   
     function Grad(x, y, z) {
       this.x = x;
@@ -38,7 +37,7 @@ const Noise = (function () {
     const perm = new Array(512);
     const gradP = new Array(512);
   
-    module.seed = function (seed) {
+    noiseModule.seed = function (seed) {
       if (seed > 0 && seed < 1) {
         seed *= 65536;
       }
@@ -61,12 +60,12 @@ const Noise = (function () {
       }
     };
   
-    module.seed(0);
+    noiseModule.seed(0);
   
     const F2 = 0.5 * (Math.sqrt(3) - 1);
     const G2 = (3 - Math.sqrt(3)) / 6;
   
-    module.simplex2 = function (xin, yin) {
+    noiseModule.simplex2 = function (xin, yin) {
       let n0, n1, n2;
       const s = (xin + yin) * F2;
       const i = Math.floor(xin + s);
@@ -122,7 +121,7 @@ const Noise = (function () {
       return 70 * (n0 + n1 + n2);
     };
   
-    return module;
-  })();
+    return noiseModule;
+})();
   
-  export default Noise;
+export default Noise;
