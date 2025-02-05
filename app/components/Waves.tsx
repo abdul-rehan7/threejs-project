@@ -4,7 +4,8 @@ import * as THREE from 'three';
 import Noise from '../lib/noice';
 
 const Waves = () => {
-  const mountRef = useRef(null);
+  const mountRef = useRef<HTMLDivElement | null>(null);
+
 
   useEffect(() => {
     // Scene, Camera, Renderer
@@ -12,7 +13,10 @@ const Waves = () => {
     const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.01, 1000);
     const renderer = new THREE.WebGLRenderer({ alpha: true });
     renderer.setClearColor(0x000000, 0);
-    mountRef.current.appendChild(renderer.domElement);
+    if (mountRef.current) {
+      mountRef.current.appendChild(renderer.domElement);
+    }
+    
 
     // Camera Position
     camera.position.x = 0;
@@ -138,7 +142,9 @@ const material = new THREE.ShaderMaterial({
     // Cleanup
     return () => {
       window.removeEventListener('resize', refreshCanvasState);
-      mountRef.current.removeChild(renderer.domElement);
+      if (mountRef.current) {
+        mountRef.current.appendChild(renderer.domElement);
+      }
     };
   }, []);
 
