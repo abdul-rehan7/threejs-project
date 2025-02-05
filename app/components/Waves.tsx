@@ -38,12 +38,12 @@ const Waves = () => {
     camera.lookAt(new THREE.Vector3(0, 0, 0));
 
     // Animation Parameters
-    const rows = 100;
-    const cols = 200;
+    const rows = 150;
+    const cols = 250;
     const separationX = 1;
     const separationZ = 1;
     const perlinScale = 0.02;
-    const waveSpeed = 0.5;
+    const waveSpeed = 0.4;
     const waveHeight = 12;
     const startTime = new Date().getTime();
 
@@ -128,7 +128,7 @@ const Waves = () => {
       let i = 0;
       
       // Spherical coordinates
-      const radius = 6; // Base radius
+      const radius = 5; // Base radius
       const thetaStep = (Math.PI * 2) / cols;
       const phiStep = Math.PI / rows;
     
