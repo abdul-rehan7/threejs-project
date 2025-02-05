@@ -43,7 +43,7 @@ const Waves = () => {
     const separationX = 1;
     const separationZ = 1;
     const perlinScale = 0.02;
-    const waveSpeed = 0.1;
+    const waveSpeed = 0.5;
     const waveHeight = 12;
     const startTime = new Date().getTime();
 
@@ -114,7 +114,7 @@ const Waves = () => {
         for (let iy = 0; iy < rows; iy++) {
           const pX = ix * perlinScale + ((curTime - startTime) / 1000) * waveSpeed;
           const pZ = iy * perlinScale + ((curTime - startTime) / 1000) * waveSpeed;
-          positions[i + 1] = Noise.simplex2(pX, pZ) * waveHeight;
+          positions[i + 1] = -Noise.simplex2(pX, pZ) * waveHeight;
           i += 3;
         }
       }
@@ -126,58 +126,55 @@ const Waves = () => {
     const updateGlobeEffect = () => {
       const positions = particles.geometry.attributes.position.array;
       let i = 0;
-
-      // Spherical coordinates interpolation
-      const radius = 10; // Radius of the sphere
-      const thetaStep = (Math.PI * 2) / cols; // Angle step for X axis
-      const phiStep = Math.PI / rows; // Angle step for Z axis
-
+      
+      // Spherical coordinates
+      const radius = 6; // Base radius
+      const thetaStep = (Math.PI * 2) / cols;
+      const phiStep = Math.PI / rows;
+    
       for (let ix = 0; ix < cols; ix++) {
         for (let iy = 0; iy < rows; iy++) {
           const theta = ix * thetaStep;
           const phi = iy * phiStep;
-
-          // Interpolate between wave grid and spherical coordinates
-          const factor = scrollProgress; // Use scroll progress to interpolate
-          const r = radius * (1 - factor); // Shrink radius with scroll
+          
+          // Adding noise for a fiery look
+          const noiseFactor = Math.random() * 1; // Random factor to create irregularities
+          const r = radius + noiseFactor * (1 - scrollProgress); // Create irregular radius based on scroll progress
+    
           positions[i] = r * Math.sin(phi) * Math.cos(theta);
-          positions[i + 1] = r * Math.cos(phi); // Y position is the height
+          positions[i + 1] = r * Math.cos(phi);
           positions[i + 2] = r * Math.sin(phi) * Math.sin(theta);
-
+    
           i += 3;
         }
       }
-
+    
       particles.geometry.attributes.position.needsUpdate = true;
     };
+    
 
     // Render Function
     const render = () => {
       renderer.render(scene, camera);
     };
 
-    // Animation Loop
-    const animate = () => {
-      requestAnimationFrame(animate);
+ // Animation Loop
+const animate = () => {
+  requestAnimationFrame(animate);
+  
+  if (scrollProgress < 0.05) {
+    perlinAnimate(); // Wave animation
+  } else {
+    updateGlobeEffect(); // Directly jump to globe effect
+  }
+  
+  // Adjust the globe's position on Y-axis
+  const centerY = Math.max(0, 10 - scrollProgress * 20); // Move it down as you scroll
+  camera.position.y = centerY;
+  
+  render();
+};
 
-      // Transition based on scroll progress
-      if (scrollProgress < 0.2) {
-        // Display waves while scrolling to the top
-        perlinAnimate();
-      } else if (scrollProgress < 1) {
-        // As you scroll further, transition into the globe effect
-        updateGlobeEffect();
-      } else {
-        // Fully form the globe
-        updateGlobeEffect();
-      }
-
-      // Adjust the globe's position on Y-axis
-      const centerY = Math.max(0, 10 - scrollProgress * 20); // Move it down as you scroll
-      camera.position.y = centerY;
-
-      render();
-    };
 
     // Handle Window Resize
     const refreshCanvasState = () => {
