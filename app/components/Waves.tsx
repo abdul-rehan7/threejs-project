@@ -45,7 +45,6 @@ const Waves = () => {
     const perlinScale = 0.02;
     const waveSpeed = 0.1;
     const waveHeight = 12;
-    const FPS = 45;
     const startTime = new Date().getTime();
 
     // Seed the noise
