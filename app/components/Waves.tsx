@@ -44,7 +44,7 @@ const Waves = () => {
     const separationZ = .2;
     const perlinScale = 0.02;
     const waveSpeed = 0.3;
-    const waveHeight = 1.7;
+    const waveHeight = 2.0;
     const startTime = new Date().getTime();
 
     // Seed the noise
@@ -109,16 +109,16 @@ const Waves = () => {
       const curTime = new Date().getTime();
       const positions = particles.geometry.attributes.position.array;
       let i = 0;
-
+    
       for (let ix = 0; ix < cols; ix++) {
         for (let iy = 0; iy < rows; iy++) {
           const pX = ix * perlinScale + ((curTime - startTime) / 1000) * waveSpeed;
           const pZ = iy * perlinScale + ((curTime - startTime) / 1000) * waveSpeed;
-          positions[i + 1] = -Noise.simplex2(pX, pZ) * waveHeight;
+          positions[i + 1] = -Noise.simplex2(pX, pZ) * waveHeight + 6; // Offset waves higher
           i += 3;
         }
       }
-
+    
       particles.geometry.attributes.position.needsUpdate = true;
     };
 
