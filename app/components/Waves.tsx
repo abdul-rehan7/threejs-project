@@ -158,21 +158,38 @@ const Waves = () => {
       renderer.render(scene, camera);
     };
 
-    const animate = () => {
-      requestAnimationFrame(animate);
-    
-      // Perlin Waves for Top and Bottom
-      if (scrollProgress < 0.05) {
-        perlinAnimate(); // Top waves
-      } else {
-        updateGlobeEffect(); // Globe in the center
+    const updateDustEffect = () => {
+      const positions = particles.geometry.attributes.position.array;
+      let i = 0;
+      
+      for (let ix = 0; ix < cols; ix++) {
+        for (let iy = 0; iy < rows; iy++) {
+          // Random scatter effect
+          positions[i] = (Math.random() - 0.5) * 20; // Random X position
+          positions[i + 1] = (Math.random() - 0.5) * 100; // Random Y position
+          positions[i + 2] = (Math.random() - 0.5) * 40; // Random Z position
+          i += 3;
+        }
       }
     
-      // Set camera Y position for central globe display
-      camera.position.y = 5; // Keep globe centered on screen
-      
-      render();
+      particles.geometry.attributes.position.needsUpdate = true;
     };
+
+    const animate = () => {
+  requestAnimationFrame(animate);
+
+  if (scrollProgress < 0.05) {
+    perlinAnimate(); // Waves phase
+  } else if (scrollProgress < 0.15) {
+    updateDustEffect(); // Dust transition phase
+  } else {
+    updateGlobeEffect(); // Globe formation phase
+  }
+
+  // Maintain central camera position
+  camera.position.y = 5;
+  render();
+};
     
 
     // Handle Window Resize
