@@ -189,7 +189,7 @@ const Waves = () => {
         const dustFactor = (scrollProgress - dustTransitionStart) / (globeTransitionStart - dustTransitionStart);
         updateDustEffect(dustFactor); // Dust
       } else {
-        const globeFactor = (scrollProgress - globeTransitionStart) / (1 - globeTransitionStart);
+        
         updateGlobeEffect?.(); // Globe formation
       }
     
