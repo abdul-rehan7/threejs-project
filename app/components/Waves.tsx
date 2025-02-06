@@ -38,13 +38,13 @@ const Waves = () => {
     camera.lookAt(new THREE.Vector3(0, 0, 0));
 
     // Animation Parameters
-    const rows = 150;
-    const cols = 250;
-    const separationX = 1;
-    const separationZ = 1;
+    const rows = 170;
+    const cols = 270;
+    const separationX = .6;
+    const separationZ = .6;
     const perlinScale = 0.02;
-    const waveSpeed = 0.4;
-    const waveHeight = 12;
+    const waveSpeed = 0.2;
+    const waveHeight = 5;
     const startTime = new Date().getTime();
 
     // Seed the noise
@@ -83,7 +83,7 @@ const Waves = () => {
 
         void main() {
           vUv = uv;
-          gl_PointSize = 2.5; // Adjust this value to change the dot size
+          gl_PointSize = 1.9; // Adjust this value to change the dot size
           pos = projectionMatrix * modelViewMatrix * vec4(position, 1.0);
           gl_Position = pos;
         }
@@ -138,7 +138,7 @@ const Waves = () => {
           const phi = iy * phiStep;
           
           // Adding noise for a fiery look
-          const noiseFactor = Math.random() * 1; // Random factor to create irregularities
+          const noiseFactor = Math.random() * .6; // Random factor to create irregularities
           const r = radius + noiseFactor * (1 - scrollProgress); // Create irregular radius based on scroll progress
     
           positions[i] = r * Math.sin(phi) * Math.cos(theta);
