@@ -105,7 +105,7 @@ const Waves = () => {
     scene.add(particles);
 
     // Animation Function: Perlin Noise Animation (Wave)
-    const perlinAnimate = () => {
+    const perlinAnimate = (waveFactor: number) => {
       const curTime = new Date().getTime();
       const positions = particles.geometry.attributes.position.array;
       let i = 0;
@@ -114,7 +114,7 @@ const Waves = () => {
         for (let iy = 0; iy < rows; iy++) {
           const pX = ix * perlinScale + ((curTime - startTime) / 1000) * waveSpeed;
           const pZ = iy * perlinScale + ((curTime - startTime) / 1000) * waveSpeed;
-          positions[i + 1] = -Noise.simplex2(pX, pZ) * waveHeight + 6; // Offset waves higher
+          positions[i + 1] = -Noise.simplex2(pX, pZ) * waveHeight + 6 * waveFactor; // Offset waves higher
           i += 3;
         }
       }
@@ -157,7 +157,7 @@ const Waves = () => {
     const render = () => {
       renderer.render(scene, camera);
     };
-    const updateDustEffect = (factor) => {
+    const updateDustEffect = (factor: number) => {
       if (!particles.geometry.attributes.position) return;
     
       const positions = particles.geometry.attributes.position.array;
@@ -175,7 +175,7 @@ const Waves = () => {
     
       particles.geometry.attributes.position.needsUpdate = true;
     };
-
+    
     const animate = () => {
       requestAnimationFrame(animate);
     
@@ -190,7 +190,7 @@ const Waves = () => {
         updateDustEffect(dustFactor); // Dust
       } else {
         const globeFactor = (scrollProgress - globeTransitionStart) / (1 - globeTransitionStart);
-        updateGlobeEffect?.(globeFactor); // Globe formation
+        updateGlobeEffect?.(); // Globe formation
       }
     
       camera.position.y = 5;
