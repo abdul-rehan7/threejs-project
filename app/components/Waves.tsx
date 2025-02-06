@@ -38,13 +38,13 @@ const Waves = () => {
     camera.lookAt(new THREE.Vector3(0, 0, 0));
 
     // Animation Parameters
-    const rows = 170;
-    const cols = 270;
-    const separationX = .6;
-    const separationZ = .6;
+    const rows = 150;
+    const cols = 300;
+    const separationX =.2;
+    const separationZ = .2;
     const perlinScale = 0.02;
-    const waveSpeed = 0.2;
-    const waveHeight = 5;
+    const waveSpeed = 0.3;
+    const waveHeight = 1.7;
     const startTime = new Date().getTime();
 
     // Seed the noise
@@ -158,23 +158,22 @@ const Waves = () => {
       renderer.render(scene, camera);
     };
 
- // Animation Loop
-const animate = () => {
-  requestAnimationFrame(animate);
-  
-  if (scrollProgress < 0.05) {
-    perlinAnimate(); // Wave animation
-  } else {
-    updateGlobeEffect(); // Directly jump to globe effect
-  }
-  
-  // Adjust the globe's position on Y-axis
-  const centerY = Math.max(0, 10 - scrollProgress * 20); // Move it down as you scroll
-  camera.position.y = centerY;
-  
-  render();
-};
-
+    const animate = () => {
+      requestAnimationFrame(animate);
+    
+      // Perlin Waves for Top and Bottom
+      if (scrollProgress < 0.05) {
+        perlinAnimate(); // Top waves
+      } else {
+        updateGlobeEffect(); // Globe in the center
+      }
+    
+      // Set camera Y position for central globe display
+      camera.position.y = 5; // Keep globe centered on screen
+      
+      render();
+    };
+    
 
     // Handle Window Resize
     const refreshCanvasState = () => {
