@@ -157,17 +157,18 @@ const Waves = () => {
     const render = () => {
       renderer.render(scene, camera);
     };
-
-    const updateDustEffect = () => {
+    const updateDustEffect = (factor) => {
+      if (!particles.geometry.attributes.position) return;
+    
       const positions = particles.geometry.attributes.position.array;
       let i = 0;
-      
+    
       for (let ix = 0; ix < cols; ix++) {
         for (let iy = 0; iy < rows; iy++) {
-          // Random scatter effect
-          positions[i] = (Math.random() - 0.5) * 20; // Random X position
-          positions[i + 1] = (Math.random() - 0.5) * 100; // Random Y position
-          positions[i + 2] = (Math.random() - 0.5) * 40; // Random Z position
+          // Controlled height with smooth factor influence
+          positions[i] = (Math.random() - 0.5) * 20; // Random X
+          positions[i + 1] = ((Math.random() - 0.5) * 99) * factor; // Controlled Y height
+          positions[i + 2] = (Math.random() - 0.5) * 40; // Random Z
           i += 3;
         }
       }
@@ -176,22 +177,27 @@ const Waves = () => {
     };
 
     const animate = () => {
-  requestAnimationFrame(animate);
-
-  if (scrollProgress < 0.05) {
-    perlinAnimate(); // Waves phase
-  } else if (scrollProgress < 0.15) {
-    updateDustEffect(); // Dust transition phase
-  } else {
-    updateGlobeEffect(); // Globe formation phase
-  }
-
-  // Maintain central camera position
-  camera.position.y = 5;
-  render();
-};
+      requestAnimationFrame(animate);
     
-
+      const dustTransitionStart = 0.2;
+      const globeTransitionStart = 0.4;
+    
+      if (scrollProgress < dustTransitionStart) {
+        const waveFactor = scrollProgress / dustTransitionStart;
+        perlinAnimate?.(waveFactor); // Smooth waves
+      } else if (scrollProgress < globeTransitionStart) {
+        const dustFactor = (scrollProgress - dustTransitionStart) / (globeTransitionStart - dustTransitionStart);
+        updateDustEffect(dustFactor); // Dust
+      } else {
+        const globeFactor = (scrollProgress - globeTransitionStart) / (1 - globeTransitionStart);
+        updateGlobeEffect?.(globeFactor); // Globe formation
+      }
+    
+      camera.position.y = 5;
+      render();
+    };
+    
+    
     // Handle Window Resize
     const refreshCanvasState = () => {
       const wWidth = window.innerWidth;
